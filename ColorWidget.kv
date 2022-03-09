@@ -1,0 +1,33 @@
+<ColoredButton@Button>:
+    canvas.before:
+        Color:
+            rgb: Green
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [16]
+
+
+    #size: (len(self.text)*12,self.font_size*1.4)
+    pos_hint:{'x':0, 'center_y':0.5}
+    color: Black
+    text: 'Button'
+    size_hint: None, None
+
+<ColoredLabel@Label>:
+    canvas.before:
+        Color:
+            rgb: Gray
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [6]
+    size: (len(self.text)*12,self.font_size*1.4)
+    pos_hint:{'x':0, 'center_y':0.5}
+    #halign: 'right'
+    #valign: 'middle'
+    color: Black
+    text: ''
+    size_hint: None, None
+    #size: self.texture_size
+    #halign: 'left'

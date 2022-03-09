@@ -1,0 +1,718 @@
+<View>:
+    #----- Элементы Управления----------------------------------
+    exchange_spinner: exchange_spinner
+    btn_connect_exchange: btn_connect_exchange
+    logger: logger
+
+    currency_spinner: currency_spinner
+
+    strategy_spinner: strategy_spinner
+    btn_start_strategy: btn_start_strategy
+    btn_stop_strategy: btn_stop_strategy
+
+    rows: 6
+    coll: 1
+    #padding: 2,2,2,2
+    #spacing: 2
+    canvas:
+        Color:
+            rgb: Black
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 2,2,2,2
+        spacing: 2
+        #----- BoxConnect--------------------------------------
+        BoxLayout:
+            orientation: 'horizontal'
+            canvas:
+                Color:
+                    rgb: Gray
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: 1, None
+            height: 40
+            #----- Раскрывающийся Список Бирж ------------------
+            ExchangeSpinner:
+                id: exchange_spinner
+                values: root.exchange_values
+                pos_hint:{'x':0, 'center_y':0.5}
+                size_hint: 1, 0.8
+                color: White
+                #bold: True
+                font_size: 22
+                text: root.name_exchange
+
+            Label:
+                id: ConnectLabel
+                text: 'REAL' if SwitchReal.active else 'DEMO'
+                size_hint: None, None
+                pos_hint:{'x':0.5, 'top':1}
+                color: Magenta if SwitchReal.active else LightGray
+                bold:  True if SwitchReal.active else False
+                height: 44
+                background_color: White
+                font_size: 18 if SwitchReal.active else 16
+            Switch:
+                id: SwitchReal
+                name: 'SwitchReal'
+                size_hint: None, None
+                padding: [0,0,0,0]
+                size: (100,40)
+                pos_hint:{'right':1, 'top':1}
+                on_active: root.switch_callback(self.active)
+
+        #  область Номера и Баланса Счета - Пoдключение
+        BoxLayout:
+            orientation: 'horizontal'
+            # Canvas creation
+            canvas:
+                Color:
+                    rgb: Gray
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint_y: None
+            height: 88
+            #pos_hint: {'x':0, 'y':1}
+
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    canvas.before:
+                        Color:
+                            rgba: Gray
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    #------------------------------------
+                    id: ServerTimeLabel
+                    text: root.server_time
+                    #------------------------------------
+                    size_hint: None, None
+                    size: (160,20)
+                    pos_hint:{'x':0, 'top':1}
+                    color: White if SwitchReal.active else White
+                    #bold:  True if SwitchReal.active else False
+                    #height: 20
+                    #width: 200
+                    font_size: 14 if SwitchReal.active else 14
+                Label:
+                    id: AccountLabel
+                    text: ' Acc. №:'
+                    size_hint: None, None
+                    size: self.texture_size
+                    halign: 'right'
+                    width: 40
+                    heigth: 28
+                    pos_hint:{'x':0.1, 'top':0}
+                    color: Black if SwitchReal.active else LightGray
+                    bold:  True if SwitchReal.active else False
+                    font_size: 16 if SwitchReal.active else 16
+                Label:
+                    id: BalanceLabel
+                    text: ' Balance:'
+                    size_hint: None, None
+                    pos_hint:{'x':0.1, 'y':0}
+                    color: Black if SwitchReal.active else LightGray
+                    bold:  True if SwitchReal.active else False
+                    height: 28
+                    width: 60
+                    background_color: White
+                    font_size: 18 if SwitchReal.active else 16
+                Label:
+                    id: CaschLabel
+                    text: ' Casch:'
+                    size_hint: None, None
+                    size: self.texture_size
+                    halign: 'right'
+                    width: 40
+                    heigth: 28
+                    pos_hint:{'x':0.1, 'top':0}
+                    color: Black if SwitchReal.active else LightGray
+                    bold:  True if SwitchReal.active else False
+                    font_size: 16 if SwitchReal.active else 16
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    #---------------------
+                    id: AccountNum
+                    text: root.account
+                    #---------------------
+                    size_hint: None, None
+                    size: (55,22)
+                    pos_hint:{'x':0, 'top':1}
+                    color: Blue if SwitchReal.active else LightGray
+                    bold:  True if SwitchReal.active else False
+
+                    background_color: White
+                    font_size: 18
+                Label:
+                    #-------------------------------
+                    id: BalanceSumm
+                    text: root.balance
+                    #------------------------------
+                    size_hint: None, None
+                    size: (60,22)
+                    pos_hint:{'x':0, 'y':0}
+                    color: Blue if SwitchReal.active else LightGray
+                    bold:  True if SwitchReal.active else False
+                    height: 22
+                    background_color: White
+                    font_size: 18
+                Label:
+                    #-------------------------------
+                    id: BalanceCasch
+                    text: root.casch
+                    #------------------------------
+                    size_hint: None, None
+                    size: (60,22)
+                    pos_hint:{'x':0, 'y':0}
+                    color: Blue if SwitchReal.active else LightGray
+                    bold:  True if SwitchReal.active else False
+                    height: 22
+                    background_color: White
+                    font_size: 18
+            Button:
+                canvas.before:
+                    Color:
+                        rgb: Gray
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                id: btn_connect_exchange
+                name: 'btn_connect_exchange'
+                text: "Подключить?"
+                font_size: 18
+                size_hint: None, None
+                size: (140,50)
+                pos_hint:{'x':0.5, 'center_y':0.5}
+                bold: True
+                color: White
+                background_color: Green
+
+                #===== Запуск Терминала ==============================
+                on_press:
+                    self.background_color = Blue
+                    #self.text = 'Start' if root.is_run_terminal else 'Stopt ???'
+                    #self.color =  Red
+                    #root.press_connect_exchange(self)
+
+                on_release:
+                    root.press_connect_exchange()
+        #----- BoxCurrency ------------------------------------------
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1,  None
+            height: 40
+            canvas:
+                Color:
+                    rgb: Gray
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            #----- Раскрывающийся Список Инструментов ------------------
+            CurrencySpinner:
+                id: currency_spinner
+                values: root.currency_values
+                pos_hint:{'x':0, 'center_y':0.5}
+                size_hint: None, 0.8
+                width: 160
+                color: White
+                background_color: Gray
+                bold: True
+                font_size: 20
+                text: root.name_currency
+
+            ColoredLabel:
+                id: PriceLabel
+                size_hint: None, None
+                width : 120
+                height: 40
+                text: root.security_price
+                color: Brown
+                bold:  True
+                font_size: 20
+                width: 160
+
+            ColoredLabel:
+                id: ChangePriceDayLabel
+                text: root.security_change_day
+                size_hint: None, None
+                width : 60
+                height: 40
+
+                color: Blue
+                background_color: White
+                bold:  True
+                font_size: 20
+                width: 160
+
+        GridLayout:
+            coll: 3
+            rows: 4
+            cols_minimum: {0: 150, 1: 20, 2: 200}
+            row_default_height: '24dp'
+            col_default_width: '120dp'
+            #row_force_default: True
+            #spacing: 10, 10
+            #padding: 10, 10
+
+            #height: self.minimum_height
+            size_hint: 1,  None
+            height: 80
+
+            # Canvas creation
+            canvas:
+                Color:
+                    rgb: Gray
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            ColoredLabel:
+            ColoredLabel:
+                id: ChangePriceWeekLabel
+                text: 'Неделя:'
+                color:  Black
+                font_size: 18
+                pos_hint:{'right': 1, 'center_y':0.5}
+            ColoredLabel:
+                id: PriceLabel
+                text: root.security_change_week
+                font_size: 18
+
+            ColoredLabel:
+            ColoredLabel:
+                id: ChangePriceMonthLabel
+                text: 'Месяц:'
+                color:  Black
+                pos_hint:{'right':1, 'top':1}
+            ColoredLabel:
+                id: ChangePriceMonthLabel
+                text: root.security_change_month
+                font_size: 18
+
+            ColoredLabel:
+            ColoredLabel:
+                text: 'Год:'
+                color:  Black
+                pos_hint:{'right':1, 'top':1}
+            ColoredLabel:
+                id: ChangePriceYahrLabel
+                text: root.security_change_yahr
+                font_size: 18
+        #====== Best Bid Best ASk =================================
+        BoxLayout:
+            orientation:  'horizontal'
+            # Canvas creation
+            canvas:
+                Color:
+                    rgb: Gray
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: 1,  None
+            height: 32
+
+            ColoredLabel:
+                width: 10
+            ColoredLabel:
+                text: 'BID: '
+                background_color: Gray
+                color: Black
+            ColoredLabel:
+                id: best_bid
+                text: root.security_best_bid
+                font_size: 22
+                halign: 'left'
+                font_style: "Caption"
+                ##
+                color: Brown
+                bold: True
+
+            ColoredLabel:
+                text: 'ASK: '
+                background_color: Gray
+                color: Black
+            ColoredLabel:
+                id: : best_ask
+                text: root.security_best_ask
+                font_size: 22
+                size: self.texture_size
+                halign: 'left'
+                color: Black
+                bold: True
+
+#====== Монитор Стратегии ====================================================
+        GridLayout:
+            canvas:
+                Color:
+                    rgb: Gray
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            coll: 1
+            rows: 3
+            row_default_height: 24
+            row_force_default: True
+            spacing: 0, 5
+            padding: 0, 10,0,10
+            size_hint: 1,  None
+            height: self.minimum_height
+            #height: sum([c.height for c in self.children])
+
+            #======= Монитор Стратегии =============================================
+            BoxLayout:
+                canvas:
+                    Color:
+                        rgb: Gray
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                orientation: "horizontal"
+                ColoredLabel:
+                    id: PositionTimeLabel
+                    text: root.strategy_open_time
+                    color: Black
+                    bold:  False
+                    font_size: 18
+                    #size: self.texture_size
+                    size: 190,18
+                    halign: 'left'
+
+                ColoredLabel:
+                    id: PositionDirect
+                    text: root.strategy_direction
+                    color: Blue if self.text=="SELL" else Red
+                    size: 130, 18
+                    bold:  True
+                    font_size: 18
+                    halign: 'right'
+
+                ColoredLabel:
+                    id: Price
+                    text: root.strategy_open_price
+                    font_size: 18
+                    color: Black if PositionDirect.text == 'BUY' else Blue
+                    bold:  True
+                    #size: self.texture_size
+                    size: 100, 18
+                    halign: 'left'
+
+            BoxLayout:
+
+                ColoredLabel:
+                    text: 'Volume:'
+                    font_size: 18
+                    bold:  False
+                    size: self.texture_size
+                    size: 80, 18
+                    halign: 'left'
+                ColoredLabel:
+                    id:    SizeLabel
+                    text:  root.strategy_volume
+                    font_size: 20
+                    bold:  True
+                    size: self.texture_size
+                    size: 80, 22
+                    halign: 'left'
+                ColoredLabel:
+                    text: 'Summ:'
+                    font_size: 18
+                    bold:  False
+                    size: self.texture_size
+                    halign: 'right'
+                ColoredLabel:
+                    id:    SummLabel
+                    text: root.strategy_summ
+                    font_size: 20
+                    bold:  True
+                    size: self.texture_size
+                    size: 130, 22
+                    halign: 'right'
+            BoxLayout:
+                ColoredLabel:
+                    text: ' Trades:'
+                    font_size: 20
+                    bold:  False
+                    #size: self.texture_size
+                    size: 80, 22
+                    halign: 'left'
+                ColoredLabel:
+                    id: TradesNumBuyLabel
+                    text: root.strategy_trades_buy
+                    font_size: 20
+                    bold:  False
+                    color: Brown
+                    size: 40, 20
+                    #size: self.texture_size
+                ColoredLabel:
+                    text: ':'
+                    font_size: 20
+                    bold:  False
+                    color: Brown
+                    size: self.texture_size
+                ColoredLabel:
+                    id: TradesProfitBuyLabel
+                    text: root.strategy_profit_buy
+                    font_size: 20
+                    bold:  True
+                    color: Red if float(self.text) >=0 else Blue
+                    #size: self.texture_size
+                    size: 100, 20
+
+                #  Число сделок Sell
+                ColoredLabel:
+                    id: TradesNumSellLabel
+                    text: root.strategy_trades_sell
+                    font_size: 20
+                    bold:  False
+                    color: Brown
+                    size: 40, 20
+                    size: self.texture_size
+                ColoredLabel:
+                    text: ':'
+                    font_size: 20
+                    bold:  False
+                    color: Brown
+                    size: self.texture_size
+                ColoredLabel:
+                    id: TradesProfitSellLabel
+                    text: root.strategy_profit_sell
+                    font_size: 20
+                    bold:  True
+                    color: Red if float(root.strategy_profit_total) >=0 else Blue
+                    #size: self.texture_size
+                    size: 90, 20
+
+#*****************************************************************************
+        GridLayout:
+            coll: 3
+            rows: 2
+            cols_minimum: {0: 100, 1: 100, 2:20}
+            #row_default_height: 10
+            #row_force_default: True
+            spacing: 0, 5
+            padding: 0, 10,0,10
+            height: self.minimum_height
+            size_hint: 1, None
+
+            #height: sum([c.height for c in self.children])
+            # Canvas creation
+            canvas:
+                Color:
+                    rgb: Gray
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    ColoredLabel:
+            ColoredLabel:
+                text: '       Profit:'
+                font_size: 20
+                bold:  False
+                color: Black
+                text_size: self.size
+                halign: 'right'
+            ColoredLabel:
+                text: root.strategy_profit
+                font_size: 20
+                bold:  True
+                color: Blue
+                text_size: self.size
+                halign: 'right'
+
+            ColoredLabel:
+                text: root.strategy_profit_change
+                font_size: 18
+                bold:  False
+                color: Black
+                size: self.texture_size
+            ColoredLabel:
+                text: '  MaxDropDown:'
+                font_size: 20
+                bold:  False
+                color: Black
+                text_size: self.size
+                halign: 'right'
+            ColoredLabel:
+                text: root.strategy_dropdown
+                font_size: 20
+                bold:  True
+                color: Blue
+                text_size: self.size
+                halign: 'right'
+
+            ColoredLabel:
+                text: root.strategy_dropdown_level
+                font_size: 18
+                bold:  False
+                color: Black
+                size: self.texture_size
+                halign: 'right'
+                pos_hint:{'right':1, 'center_y':0.5}
+        #=================================================================================
+        BoxLayout:
+            id: BoxStrategy
+            orientation: 'vertical'
+            padding: 10,0,10,00
+            spacing: 0
+            size_hint: 1, None
+
+            canvas:
+                Color:
+                    rgb: Gray
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            size_hint: 1, None
+            height: self.minimum_height
+
+            ColoredLabel:
+                id:  StrategyLabel
+                text: 'Стратегия:'
+                pos_hint:{'x':0, 'top':1}
+                font_size: 20
+                bold:  False
+                italic: True
+                color: Black
+                #text_size: self.size
+                size: self.texture_size
+                halign: 'left'
+
+            #----- Раскрывающийся Список Стратегий ------------------
+            StrategySpinner:
+                id: strategy_spinner
+                values: root.strategy_values
+                pos_hint:{'x':0, 'top':1}
+                size_hint: 1, None
+                width: 160
+                height: 36
+                color: White
+                #bold: True
+                font_size: 22
+                text: root.name_strategy
+
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 20,0,0,00
+                spacing: 30
+                size_hint: 1, None
+                height: self.minimum_height
+
+                canvas:
+                    Color:
+                        rgb: Gray
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                ColoredLabel:                   #
+                    text: root.strategy_time_start
+                    font_size: 20
+                    bold:  True
+                    color: Blue
+                    size: self.texture_size
+                    halign: 'right'
+
+                ColoredLabel:
+                    text: root.strategy_time_work
+                    font_size: 18
+                    bold:  True
+                    color: Brown
+                    #text_size: self.size
+                    size: self.texture_size
+
+#============== Start / Stop Strategy =================================================
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: 10,10,0,10
+            spacing: 20
+            size_hint: 1, None
+            height: self.minimum_height
+            canvas:
+                Color:
+                    rgb: Gray
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Button:
+                id: btn_start_strategy
+                text: "Start"
+                font_size: 26
+
+                size_hint: None, None
+                size: 140,40
+                pos_hint:{'x':0, 'top':1}
+
+                bold: False
+                color: White
+                background_color: Green
+
+                on_press:
+                    self.color: Green
+                    #self.text = ' ... Wait'
+                    self.background_color: White
+                    root.ids.logger.text +=f'(\n .. on_press {self.text} !!!'
+                    root.press_connect_strategy()
+
+                on_release:
+                    self.color: Green
+                    self.background_color: White
+                    #self.text ='Connect'
+                    root.release_connect_strategy()
+                    root.ids.logger.text +=f'(\n .. on_release {self.text} !!!'
+
+            Button:
+                id: btn_stop_strategy
+                text: "Stop"
+                font_size: 26
+
+                size_hint: None, None
+                size: 140,40
+                pos_hint:{'x':0, 'top':1}
+
+                bold: False
+                color: White
+                background_color: Red
+
+                on_press:
+                    self.color: Green
+                    #self.text = ' ... Wait'
+                    self.background_color: White
+                    root.ids.logger.text +=f'(\n .. on_press {self.text} !!!'
+                    root.press_stop_strategy()
+
+                on_release:
+                    self.color: Green
+                    self.background_color: White
+                    #self.text ='Connect'
+                    root.release_stop_strategy()
+                    root.ids.logger.text +=f'(\n .. on_release {self.text} !!!'
+
+     #----- Logger -------------------------------------------------
+        TextInput:
+            id: logger
+            background_color: Gray
+            size_hint: 1, 1
+            #height: 150
+            #pos_hint: {'center_x':0.5, 'top':0 }
+            text:  root.logging_info
+            font_size: 18
+            foreground_color:  White
+            #on_focus: root.setDate()
+        #BoxLayout:
+        #    orientation: 'horizontal'
+
+
+
+# выпадающий список
+<MultiSelectOption@Button>:
+    size_hint: 0.5, None
+    height: '38dp'
